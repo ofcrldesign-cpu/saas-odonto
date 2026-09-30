@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OdontoCare - Sistema Integrado de Gestão Odontológica</title>
+  
+  <!-- FontAwesome Icons & Google Fonts -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div id="app-container">
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-logo">
+          <i class="fa-solid fa-tooth"></i>
+        </div>
+        <div>
+          <div class="brand-name">OdontoCare</div>
+          <div class="brand-subtitle">Gestão Odontológica</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-menu">
+        <div class="menu-category">Menu Principal</div>
+        
+        <a class="nav-link active" data-view="view-dashboard">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Dashboard</span>
+        </a>
+        
+        <a class="nav-link" data-view="view-pacientes">
+          <i class="fa-solid fa-users"></i>
+          <span>Pacientes & Prontuário</span>
+        </a>
+        
+        <a class="nav-link" data-view="view-agenda">
+          <i class="fa-solid fa-calendar-days"></i>
+          <span>Agenda de Consultas</span>
+        </a>
+
+        <div class="menu-category">Gestão & Clínica</div>
+
+        <a class="nav-link" data-view="view-financeiro">
+          <i class="fa-solid fa-wallet"></i>
+          <span>Financeiro</span>
+        </a>
+
+        <a class="nav-link" data-view="view-receituario">
+          <i class="fa-solid fa-file-prescription"></i>
+          <span>Receituário & Atestados</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-card">
+          <img src="assets/dentist_avatar.jpg" alt="Dr. Eduardo Silva" class="user-avatar">
+          <div class="user-info">
+            <div class="user-name">Dr. Eduardo Silva</div>
+            <div class="user-role">CRO-SP 123456</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <div class="main-wrapper">
+      <!-- TOP NAVIGATION BAR -->
+      <header class="topbar">
+        <div class="search-bar">
+          <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
+          <input type="text" id="global-search" placeholder="Buscar paciente por nome, CPF ou telefone...">
+        </div>
+
+        <div class="topbar-actions">
+          <button class="icon-btn" id="theme-toggle-btn" title="Alternar Modo Claro/Escuro">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          
+          <button class="icon-btn" title="Notificações">
+            <i class="fa-solid fa-bell"></i>
+            <span class="badge-dot"></span>
+          </button>
+
+          <button class="btn btn-primary" onclick="window.app.openModal('modal-new-appointment')">
+            <i class="fa-solid fa-calendar-plus"></i>
+            <span>Nova Consulta</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- CONTENT BODY CONTAINER -->
+      <main class="content-area">
+        
+        <!-- DASHBOARD VIEW -->
+        <section id="view-dashboard" class="page-view active">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Painel Geral</h1>
+              <p class="page-subtitle">Bem-vindo de volta, Dr. Eduardo. Confira o resumo da clínica hoje.</p>
+            </div>
+            <button class="btn btn-secondary" onclick="window.app.openModal('modal-new-patient')">
+              <i class="fa-solid fa-user-plus"></i> Novo Paciente
+            </button>
+          </div>
+
+          <!-- METRICS CARDS -->
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-info">
+                <h3>Consultas Hoje</h3>
+                <div class="metric-value" id="dash-today-count">0</div>
+                <div class="metric-trend up">
+                  <i class="fa-solid fa-arrow-trend-up"></i> 100% da capacidade
+                </div>
+              </div>
+              <div class="metric-icon teal">
+                <i class="fa-solid fa-calendar-check"></i>
+              </div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-info">
+                <h3>Pacientes Ativos</h3>
+                <div class="metric-value" id="dash-patients-total">0</div>
+                <div class="metric-trend up">
+                  <i class="fa-solid fa-arrow-trend-up"></i> +4 este mês
+                </div>
+              </div>
+              <div class="metric-icon blue">
+                <i class="fa-solid fa-user-gear"></i>
+              </div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-info">
+                <h3>Faturamento Mês</h3>
+                <div class="metric-value" id="dash-revenue-total">R$ 0,00</div>
+                <div class="metric-trend up">
+                  <i class="fa-solid fa-arrow-trend-up"></i> +12% vs mês anterior
+                </div>
+              </div>
+              <div class="metric-icon green">
+                <i class="fa-solid fa-money-bill-trend-up"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- DASHBOARD GRID -->
+          <div class="dashboard-grid">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="fa-solid fa-clock-rotate-left" style="color: var(--primary);"></i>
+                  <span>Agenda de Atendimentos - Hoje</span>
+                </div>
+                <button class="btn btn-sm btn-outline" onclick="window.app.switchView('view-agenda', document.querySelector('[data-view=\'view-agenda\']'))">Ver Agenda Completa</button>
+              </div>
+              
+              <div class="custom-table-wrapper">
+                <table class="custom-table">
+                  <thead>
+                    <tr>
+                      <th>Horário</th>
+                      <th>Paciente</th>
+                      <th>Procedimento</th>
+                      <th>Dentista</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dash-appointments-list">
+                    <!-- Populated via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- QUICK SHORTCUTS & ALERTS -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">
+                  <i class="fa-solid fa-bolt" style="color: var(--warning);"></i>
+                  <span>Ações Rápidas</span>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <button class="btn btn-secondary" style="justify-content: flex-start;" onclick="window.app.openModal('modal-new-patient')">
+                  <i class="fa-solid fa-user-plus" style="color: var(--primary);"></i> Cadastrar Paciente
+                </button>
+                <button class="btn btn-secondary" style="justify-content: flex-start;" onclick="window.app.openModal('modal-new-appointment')">
+                  <i class="fa-solid fa-calendar-plus" style="color: var(--secondary);"></i> Novo Agendamento
+                </button>
+                <button class="btn btn-secondary" style="justify-content: flex-start;" onclick="window.app.openModal('modal-new-transaction')">
+                  <i class="fa-solid fa-cash-register" style="color: var(--accent);"></i> Registrar Pagamento
+                </button>
+                <button class="btn btn-secondary" style="justify-content: flex-start;" onclick="window.app.switchView('view-receituario', document.querySelector('[data-view=\'view-receituario\']'))">
+                  <i class="fa-solid fa-receipt" style="color: var(--info);"></i> Emitir Receituário
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PACIENTES & PRONTUÁRIO VIEW -->
+        <section id="view-pacientes" class="page-view">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Gestão de Pacientes</h1>
+              <p class="page-subtitle">Prontuário eletrônico completo e histórico clínico com Odontograma 2D.</p>
+            </div>
+            <button class="btn btn-primary" onclick="window.app.openModal('modal-new-patient')">
+              <i class="fa-solid fa-user-plus"></i> Cadastrar Paciente
+            </button>
+          </div>
+
+          <div class="card">
+            <div class="custom-table-wrapper">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>Nome do Paciente</th>
+                    <th>Telefone / WhatsApp</th>
+                    <th>Convênio</th>
+                    <th>Status</th>
+                    <th>E-mail</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="patients-table-body">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- AGENDA VIEW -->
+        <section id="view-agenda" class="page-view">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Agenda de Consultas</h1>
+              <p class="page-subtitle">Gerencie os horários e atendimentos da clínica em tempo real.</p>
+            </div>
+            <button class="btn btn-primary" onclick="window.app.openNewAppointmentModal()">
+              <i class="fa-solid fa-calendar-plus"></i> Agendar Horário
+            </button>
+          </div>
+
+          <div class="card">
+            <div id="agenda-slots">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+        </section>
+
+        <!-- FINANCEIRO VIEW -->
+        <section id="view-financeiro" class="page-view">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Fluxo Financeiro</h1>
+              <p class="page-subtitle">Controle de receitas, despesas e fluxo de caixa da clínica.</p>
+            </div>
+            <button class="btn btn-primary" onclick="window.app.openModal('modal-new-transaction')">
+              <i class="fa-solid fa-plus-circle"></i> Novo Lançamento
+            </button>
+          </div>
+
+          <div class="metrics-grid">
+            <div class="metric-card">
+              <div class="metric-info">
+                <h3>Total Receitas</h3>
+                <div class="metric-value" id="fin-total-receitas" style="color: var(--accent);">R$ 0,00</div>
+              </div>
+              <div class="metric-icon green"><i class="fa-solid fa-circle-arrow-down"></i></div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-info">
+                <h3>Total Despesas</h3>
+                <div class="metric-value" id="fin-total-despesas" style="color: var(--danger);">R$ 0,00</div>
+              </div>
+              <div class="metric-icon orange"><i class="fa-solid fa-circle-arrow-up"></i></div>
+            </div>
+
+            <div class="metric-card">
+              <div class="metric-info">
+                <h3>Saldo Líquido</h3>
+                <div class="metric-value" id="fin-saldo-liquido">R$ 0,00</div>
+              </div>
+              <div class="metric-icon teal"><i class="fa-solid fa-scale-balanced"></i></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Histórico de Transações</div>
+            </div>
+            <div class="custom-table-wrapper">
+              <table class="custom-table">
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Descrição</th>
+                    <th>Tipo</th>
+                    <th>Forma de Pgto</th>
+                    <th>Valor</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="financials-table-body">
+                  <!-- Populated via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- RECEITUÁRIO VIEW -->
+        <section id="view-receituario" class="page-view">
+          <div class="page-header">
+            <div>
+              <h1 class="page-title">Emissão de Receituário & Atestados</h1>
+              <p class="page-subtitle">Gere e imprima prescrições médicas personalizadas em segundos.</p>
+            </div>
+          </div>
+
+          <div class="card" style="max-width: 700px; margin: 0 auto;">
+            <div class="card-header">
+              <div class="card-title"><i class="fa-solid fa-file-medical"></i> Gerador de Prescrição</div>
+            </div>
+            
+            <div class="form-group" style="margin-bottom: 1rem;">
+              <label class="form-label">Selecione o Paciente</label>
+              <select class="form-control" id="prescription-patient-select">
+                <option>Ana Beatriz Ramos</option>
+                <option>Carlos Eduardo Mendes</option>
+                <option>Mariana Souza Lima</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+              <label class="form-label">Medicamentos e Instruções de Uso</label>
+              <textarea class="form-control" id="prescription-text-input" rows="8" placeholder="Digite a prescrição aqui...">1. Amoxicilina 500mg - Tomar 1 comprimido VO a cada 8 horas por 7 dias.
+2. Dipirona Sódica 500mg - Tomar 1 comprimido VO em caso de dor a cada 6 horas.</textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+              <button class="btn btn-primary" onclick="window.app.printPrescription()">
+                <i class="fa-solid fa-print"></i> Imprimir Receituário
+              </button>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- MODAL: NOVO PACIENTE -->
+  <div class="modal-overlay" id="modal-new-patient">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="font-weight: 800;"><i class="fa-solid fa-user-plus" style="color: var(--primary);"></i> Cadastrar Novo Paciente</h3>
+        <button class="icon-btn" data-close-modal><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="new-patient-form">
+        <div class="modal-body">
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label class="form-label">Nome Completo</label>
+              <input type="text" name="name" class="form-control" placeholder="ex: Juliana Paes" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">CPF</label>
+              <input type="text" name="cpf" class="form-control" placeholder="000.000.000-00" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Telefone / WhatsApp</label>
+              <input type="text" name="phone" class="form-control" placeholder="(11) 99999-9999" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">E-mail</label>
+              <input type="email" name="email" class="form-control" placeholder="paciente@email.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Data de Nascimento</label>
+              <input type="date" name="birthdate" class="form-control">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Convênio Odontológico</label>
+              <select name="insurance" class="form-control">
+                <option value="Particular">Particular</option>
+                <option value="Unimed Odonto">Unimed Odonto</option>
+                <option value="Bradesco Dental">Bradesco Dental</option>
+                <option value="Amil Dental">Amil Dental</option>
+                <option value="SulAmérica Odonto">SulAmérica Odonto</option>
+              </select>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Endereço Residencial</label>
+              <input type="text" name="address" class="form-control" placeholder="Rua, Número, Bairro, Cidade">
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Observações / Anamnese Inicial</label>
+              <textarea name="notes" class="form-control" rows="3" placeholder="Histórico de saúde, alergias a medicamentos, etc..."></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal>Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar Paciente</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: NOVA CONSULTA -->
+  <div class="modal-overlay" id="modal-new-appointment">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="font-weight: 800;"><i class="fa-solid fa-calendar-plus" style="color: var(--primary);"></i> Agendar Nova Consulta</h3>
+        <button class="icon-btn" data-close-modal><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="new-appointment-form">
+        <div class="modal-body">
+          <div class="form-grid">
+            <div class="form-group full-width">
+              <label class="form-label">Paciente</label>
+              <select name="patientId" class="form-control" id="app-patient-select" required>
+                <!-- Populated via JS -->
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Cirurgião-Dentista</label>
+              <select name="dentist" class="form-control">
+                <option value="Dr. Eduardo Silva">Dr. Eduardo Silva</option>
+                <option value="Dra. Camila Torres">Dra. Camila Torres</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Procedimento</label>
+              <select name="procedure" class="form-control">
+                <option value="Avaliação Geral">Avaliação Geral</option>
+                <option value="Profilaxia & Raspagem">Profilaxia & Raspagem (Limpeza)</option>
+                <option value="Restauração em Resina">Restauração em Resina</option>
+                <option value="Tratamento de Canal (Endodontia)">Tratamento de Canal (Endodontia)</option>
+                <option value="Extração / Cirurgia">Extração / Cirurgia</option>
+                <option value="Manutenção Ortodôntica">Manutenção Ortodôntica</option>
+                <option value="Avaliação para Implante">Avaliação para Implante</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Data</label>
+              <input type="date" name="date" class="form-control" id="app-date-input" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Horário</label>
+              <input type="time" name="time" class="form-control" id="app-time-input" required>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Duração Estimada</label>
+              <select name="duration" class="form-control">
+                <option value="30 min">30 minutos</option>
+                <option value="45 min">45 minutos</option>
+                <option value="60 min">1 hora</option>
+                <option value="90 min">1 hora e 30 minutos</option>
+              </select>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Observações da Consulta</label>
+              <textarea name="notes" class="form-control" rows="2" placeholder="Dente específico, preparo especial..."></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal>Cancelar</button>
+          <button type="submit" class="btn btn-primary">Confirmar Agendamento</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: DETALHES DO PACIENTE & ODONTOGRAMA INTERATIVO -->
+  <div class="modal-overlay" id="modal-patient-details">
+    <div class="modal-content" style="max-width: 900px;">
+      <div class="modal-header">
+        <div>
+          <h3 id="modal-patient-name" style="font-weight: 800; color: var(--primary);">Prontuário do Paciente</h3>
+          <p id="modal-patient-info" style="font-size: 0.8rem; color: var(--text-muted);"></p>
+        </div>
+        <button class="icon-btn" data-close-modal><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <p style="font-size: 0.875rem; margin-bottom: 1rem; color: var(--text-secondary);" id="modal-patient-notes"></p>
+
+        <!-- ODONTOGRAM SECTION -->
+        <div class="odontogram-wrapper">
+          <div class="card-title" style="margin-bottom: 1rem; font-size: 1.1rem; font-weight: 800;">
+            <i class="fa-solid fa-teeth" style="color: var(--primary);"></i> Odontograma Interativo 2D
+          </div>
+
+          <div class="odontogram-controls">
+            <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">SELECIONE A CONDIÇÃO:</span>
+            <div class="tooth-status-selector">
+              <div class="status-pill selected" data-status="carie">
+                <span class="status-dot carie"></span> Cárie
+              </div>
+              <div class="status-pill" data-status="restauracao">
+                <span class="status-dot restauracao"></span> Restauração
+              </div>
+              <div class="status-pill" data-status="canal">
+                <span class="status-dot canal"></span> Canal / Endodontia
+              </div>
+              <div class="status-pill" data-status="extracao">
+                <span class="status-dot extracao"></span> Indicação Extração
+              </div>
+              <div class="status-pill" data-status="implante">
+                <span class="status-dot implante"></span> Implante / Prótese
+              </div>
+              <div class="status-pill" data-status="higido">
+                <span class="status-dot higido"></span> Hígido
+              </div>
+            </div>
+          </div>
+
+          <p style="font-size: 0.75rem; color: var(--text-muted); text-align: center; margin-bottom: 1rem;">
+            * Clique nas superfícies dos dentes (Oclusal, Mesial, Distal, Vestibular, Lingual) para registrar os procedimentos.
+          </p>
+
+          <div class="arch-title">Arcada Superior (Maxilar)</div>
+          <div class="odontogram-arch" id="arch-upper">
+            <!-- Dynamic Teeth -->
+          </div>
+
+          <div class="arch-title" style="margin-top: 1.5rem;">Arcada Inferior (Mandíbula)</div>
+          <div class="odontogram-arch" id="arch-lower">
+            <!-- Dynamic Teeth -->
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-close-modal>Fechar Prontuário</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: NOVO LANÇAMENTO FINANCEIRO -->
+  <div class="modal-overlay" id="modal-new-transaction">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 style="font-weight: 800;"><i class="fa-solid fa-cash-register" style="color: var(--primary);"></i> Lançamento Financeiro</h3>
+        <button class="icon-btn" data-close-modal><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form id="new-transaction-form">
+        <div class="modal-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Tipo de Operação</label>
+              <select name="type" class="form-control" required>
+                <option value="receita">Receita (Entrada)</option>
+                <option value="despesa">Despesa (Saída)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Valor (R$)</label>
+              <input type="number" step="0.01" name="amount" class="form-control" placeholder="0.00" required>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Descrição</label>
+              <input type="text" name="description" class="form-control" placeholder="ex: Restauração Resina - Ana" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Categoria</label>
+              <select name="category" class="form-control">
+                <option value="Procedimentos">Procedimentos</option>
+                <option value="Consultas">Consultas</option>
+                <option value="Insumos Odontológicos">Insumos Odontológicos</option>
+                <option value="Equipamentos">Equipamentos</option>
+                <option value="Contas Fixas">Contas Fixas</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Forma de Pagamento</label>
+              <select name="method" class="form-control">
+                <option value="PIX">PIX</option>
+                <option value="Cartão de Crédito">Cartão de Crédito</option>
+                <option value="Cartão de Débito">Cartão de Débito</option>
+                <option value="Dinheiro">Dinheiro</option>
+                <option value="Boleto">Boleto</option>
+              </select>
+            </div>
+            <div class="form-group full-width">
+              <label class="form-label">Data do Pagamento</label>
+              <input type="date" name="date" class="form-control" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-close-modal>Cancelar</button>
+          <button type="submit" class="btn btn-primary">Registrar Lançamento</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toast-container"></div>
+
+  <!-- APPLICATION SCRIPT -->
+  <script src="app.js"></script>
+</body>
+</html>
