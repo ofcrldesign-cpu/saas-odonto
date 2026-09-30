@@ -12,16 +12,22 @@
 <body>
 
   <div id="app-container">
+    <!-- SIDEBAR OVERLAY FOR MOBILE -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
     <!-- SIDEBAR NAVIGATION -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
         <div class="brand-logo">
           <i class="fa-solid fa-tooth"></i>
         </div>
-        <div>
+        <div class="brand-info">
           <div class="brand-name">OdontoCare</div>
           <div class="brand-subtitle">Gestão Odontológica</div>
         </div>
+        <button class="icon-btn sidebar-close-btn" id="sidebar-close-btn" title="Fechar Menu">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>
 
       <nav class="sidebar-menu">
@@ -70,6 +76,16 @@
     <div class="main-wrapper">
       <!-- TOP NAVIGATION BAR -->
       <header class="topbar">
+        <div class="topbar-left">
+          <button class="icon-btn mobile-menu-toggle" id="mobile-menu-btn" title="Abrir Menu">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <div class="mobile-brand-title">
+            <i class="fa-solid fa-tooth" style="color: var(--primary);"></i>
+            <span>OdontoCare</span>
+          </div>
+        </div>
+
         <div class="search-bar">
           <i class="fa-solid fa-magnifying-glass" style="color: var(--text-muted);"></i>
           <input type="text" id="global-search" placeholder="Buscar paciente por nome, CPF ou telefone...">
@@ -85,9 +101,9 @@
             <span class="badge-dot"></span>
           </button>
 
-          <button class="btn btn-primary" onclick="window.app.openModal('modal-new-appointment')">
+          <button class="btn btn-primary btn-new-app-topbar" onclick="window.app.openModal('modal-new-appointment')">
             <i class="fa-solid fa-calendar-plus"></i>
-            <span>Nova Consulta</span>
+            <span class="btn-text">Nova Consulta</span>
           </button>
         </div>
       </header>

@@ -151,12 +151,28 @@ class OdontoApp {
 
   // --- NAVIGATION & THEME ---
   setupEventListeners() {
+    // Mobile Sidebar Toggles
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const sidebarCloseBtn = document.getElementById('sidebar-close-btn');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+    if (mobileMenuBtn) {
+      mobileMenuBtn.addEventListener('click', () => this.toggleMobileSidebar());
+    }
+    if (sidebarCloseBtn) {
+      sidebarCloseBtn.addEventListener('click', () => this.closeMobileSidebar());
+    }
+    if (sidebarOverlay) {
+      sidebarOverlay.addEventListener('click', () => this.closeMobileSidebar());
+    }
+
     // Navigation Links
     document.querySelectorAll('.nav-link').forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
         const targetView = link.getAttribute('data-view');
         this.switchView(targetView, link);
+        this.closeMobileSidebar();
       });
     });
 
@@ -192,6 +208,29 @@ class OdontoApp {
     if (transactionForm) {
       transactionForm.addEventListener('submit', (e) => this.handleSaveTransaction(e));
     }
+  }
+
+  toggleMobileSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    if (sidebar && overlay) {
+      const isOpen = sidebar.classList.contains('open');
+      if (isOpen) {
+        this.closeMobileSidebar();
+      } else {
+        sidebar.classList.add('open');
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+  }
+
+  closeMobileSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    if (sidebar) sidebar.classList.remove('open');
+    if (overlay) overlay.classList.remove('active');
+    document.body.style.overflow = '';
   }
 
   switchView(viewId, activeLinkElement) {

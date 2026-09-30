@@ -251,6 +251,31 @@ body {
   color: var(--text-muted);
 }
 
+/* Sidebar Overlay for Mobile */
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 45;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.sidebar-close-btn {
+  display: none;
+}
+
 /* Main Content Area */
 .main-wrapper {
   margin-left: var(--sidebar-width);
@@ -259,6 +284,7 @@ body {
   flex-direction: column;
   min-height: 100vh;
   width: calc(100vw - var(--sidebar-width));
+  transition: var(--transition);
 }
 
 /* Top Navigation Bar */
@@ -275,6 +301,26 @@ body {
   position: sticky;
   top: 0;
   z-index: 40;
+  gap: 1rem;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mobile-menu-toggle {
+  display: none;
+}
+
+.mobile-brand-title {
+  display: none;
+  font-size: 1.15rem;
+  font-weight: 800;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-primary);
 }
 
 .search-bar {
@@ -995,5 +1041,292 @@ body {
     left: 0;
     top: 0;
     width: 100%;
+  }
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN & MEDIA QUERIES (Desktop, Tablet, Mobile)
+   ========================================================================== */
+
+/* Tablets & Mobile Devices (under 1024px) */
+@media (max-width: 1023.98px) {
+  #app-container {
+    overflow-x: hidden;
+  }
+
+  .sidebar {
+    transform: translateX(-100%);
+    width: 280px;
+    max-width: 85vw;
+    box-shadow: var(--shadow-xl);
+    z-index: 50;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .sidebar-header {
+    justify-content: space-between;
+  }
+
+  .sidebar-close-btn {
+    display: flex;
+  }
+
+  .main-wrapper {
+    margin-left: 0;
+    width: 100vw;
+  }
+
+  .topbar {
+    padding: 0 1.25rem;
+  }
+
+  .mobile-menu-toggle {
+    display: flex;
+  }
+
+  .mobile-brand-title {
+    display: flex;
+  }
+
+  .search-bar {
+    width: 240px;
+  }
+
+  .search-bar:focus-within {
+    width: 280px;
+  }
+}
+
+/* Mobile Screens (under 768px) */
+@media (max-width: 767.98px) {
+  .topbar {
+    padding: 0 0.85rem;
+    height: 64px;
+    gap: 0.5rem;
+  }
+
+  .topbar-left {
+    gap: 0.5rem;
+  }
+
+  .mobile-brand-title span {
+    display: none;
+  }
+
+  .search-bar {
+    width: 100%;
+    flex: 1;
+    padding: 0.45rem 0.75rem;
+  }
+
+  .search-bar:focus-within {
+    width: 100%;
+  }
+
+  .search-bar input {
+    font-size: 0.8rem;
+  }
+
+  .topbar-actions {
+    gap: 0.4rem;
+  }
+
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+  }
+
+  .btn-new-app-topbar {
+    padding: 0.45rem 0.75rem;
+  }
+
+  .btn-new-app-topbar .btn-text {
+    display: none;
+  }
+
+  .content-area {
+    padding: 1.25rem 0.85rem;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .page-header > button,
+  .page-header > .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .page-title {
+    font-size: 1.35rem;
+  }
+
+  .page-subtitle {
+    font-size: 0.8rem;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .metric-card {
+    padding: 1.15rem;
+  }
+
+  .metric-info .metric-value {
+    font-size: 1.45rem;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .card {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: var(--radius-md);
+  }
+
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .card-header .btn {
+    align-self: flex-start;
+  }
+
+  /* Form & Modal Responsiveness */
+  .modal-content {
+    width: 94%;
+    max-height: 90vh;
+    border-radius: var(--radius-lg);
+  }
+
+  .modal-header {
+    padding: 1rem 1.25rem;
+  }
+
+  .modal-body {
+    padding: 1rem 1.25rem;
+  }
+
+  .modal-footer {
+    padding: 1rem 1.25rem;
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+  }
+
+  .modal-footer .btn {
+    width: 100%;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .form-group.full-width {
+    grid-column: span 1;
+  }
+
+  /* Agenda & Time Slot Responsiveness */
+  .time-slot {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    padding: 0.75rem 0.5rem;
+  }
+
+  .time-slot .time {
+    width: auto;
+  }
+
+  .appointment-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  /* Odontogram Mobile Scroll & Touch Optimization */
+  .odontogram-wrapper {
+    padding: 1rem 0.75rem;
+    border-radius: var(--radius-lg);
+  }
+
+  .odontogram-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tooth-status-selector {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 0.35rem;
+  }
+
+  .status-pill {
+    padding: 0.35rem 0.65rem;
+    font-size: 0.75rem;
+  }
+
+  .odontogram-arch {
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 0.75rem;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+  }
+
+  .tooth-item {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+  }
+
+  .tooth-svg {
+    width: 34px;
+    height: 44px;
+  }
+
+  /* Toast Notifications on Mobile */
+  #toast-container {
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+  }
+
+  .toast {
+    min-width: unset;
+    width: 100%;
+  }
+}
+
+/* Extra Small Screens (under 480px) */
+@media (max-width: 479.98px) {
+  .topbar-actions {
+    gap: 0.25rem;
+  }
+
+  .btn {
+    padding: 0.55rem 0.9rem;
+    font-size: 0.825rem;
+  }
+
+  .custom-table th,
+  .custom-table td {
+    padding: 0.65rem 0.5rem;
+    font-size: 0.8rem;
   }
 }
